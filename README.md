@@ -1,2 +1,2 @@
-# crypto-start
+# Crypto Start
 Demo project about crypto
