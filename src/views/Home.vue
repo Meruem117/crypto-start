@@ -1,19 +1,24 @@
 <template>
-  <div class="home">
-    <h4>AES密钥:{{ aeskey }}</h4>
-    <h4>原文:{{ message }}</h4>
-    <h4>密文:{{ encryptStr }}</h4>
-    <h4>解密结果:{{ decryptStr }}</h4>
-    <div>
-      <h2>对称加解密</h2>
-      <el-button round type="primary" @click="handleAESEncrypt()"> AES加密 </el-button>
-      <el-button round type="primary" @click="handleAESDecrypt()"> AES解密 </el-button>
-    </div>
-    <div>
-      <h2>对称加解密</h2>
-      <el-button round type="primary" @click="handleSM4Encrypt()"> SM4加密 </el-button>
-      <el-button round type="primary" @click="handleSM4Decrypt()"> SM4解密 </el-button>
-    </div>
+  <div>
+    <el-row type="flex" justify="center">
+      <h2>Crypto</h2>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <div>
+        <h4>密钥：{{ key }}</h4>
+        <h4>原文：{{ message }}</h4>
+        <h4>密文：{{ encryptStr }}</h4>
+        <h4>解密结果：{{ decryptStr }}</h4>
+      </div>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <el-button round type="primary" @click="handleAESEncrypt">AES加密</el-button>
+      <el-button round type="primary" @click="handleAESDecrypt">AES解密</el-button>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <el-button round type="primary" @click="handleSM4Encrypt">SM4加密</el-button>
+      <el-button round type="primary" @click="handleSM4Decrypt">SM4解密</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -25,47 +30,40 @@ export default {
   name: 'home',
   data() {
     return {
-      message: "测试源代码abcd",
-      aeskey: "35acc44114da249c",//密钥
-      sm4key: '0123456789abcdeffedcba9876543210',
-      encryptStr: "",//加密
-      decryptStr: "", //解密
+      message: 'test',
+      key: "35acc44114da249c",
+      encryptStr: '',
+      decryptStr: '',
     }
-  },
-  created() {
-    // this.aeskey = CryptoJS.AES.getKey();
   },
   methods: {
     // AES加密
     handleAESEncrypt() {
-      // debugger
-      console.log(CryptoJS.mode, 'CryptoJS99999');
-      console.log(CryptoJS.pad, 'CryptoJS6666');
-      this.decryptStr = '';
-      this.encryptStr = CryptoJS.AES.encrypt(this.utf8Parse(this.message), this.utf8Parse(this.aeskey), {
+      this.decryptStr = ''
+      this.encryptStr = CryptoJS.AES.encrypt(this.utf8Parse(this.message), this.utf8Parse(this.key), {
         mode: CryptoJS.mode.ECB,
         padding: CryptoJS.pad.Pkcs7
       }).toString()
     },
     // AES解密
     handleAESDecrypt() {
-      let bytes = CryptoJS.AES.decrypt(this.encryptStr, this.utf8Parse(this.aeskey), {
+      let bytes = CryptoJS.AES.decrypt(this.encryptStr, this.utf8Parse(this.key), {
         mode: CryptoJS.mode.ECB,
         padding: CryptoJS.pad.Pkcs7
       })
-      this.decryptStr = bytes.toString(CryptoJS.enc.Utf8);
+      this.decryptStr = bytes.toString(CryptoJS.enc.Utf8)
     },
     // SM4加密
     handleSM4Encrypt() {
-      this.decryptStr = '';
-      this.encryptStr = SM4.encrypt(this.message, this.stringToHex(this.aeskey), {
+      this.decryptStr = ''
+      this.encryptStr = SM4.encrypt(this.message, this.stringToHex(this.key), {
         inputEncoding: 'utf8',
         outputEncoding: 'base64'
       })
     },
     // SM4解密
     handleSM4Decrypt() {
-      this.decryptStr = SM4.decrypt(this.encryptStr, this.stringToHex(this.aeskey), {
+      this.decryptStr = SM4.decrypt(this.encryptStr, this.stringToHex(this.key), {
         inputEncoding: 'base64',
         outputEncoding: 'utf8'
       })
@@ -84,3 +82,9 @@ export default {
   },
 }
 </script>
+
+<style lang="less" scoped>
+.el-row {
+  margin-bottom: 20px;
+}
+</style>
